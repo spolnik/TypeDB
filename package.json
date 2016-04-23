@@ -4,7 +4,11 @@
   "description": "Simple JSON Database",
   "main": "index.js",
   "scripts": {
-    "test": "mocha build/test"
+    "test": "mocha build/test",
+    "pretest": "npm run tsc",
+    "tsc": "tsc",
+    "pretsc": "npm run clean",
+    "clean": "rm -r build/*"
   },
   "repository": {
     "type": "git",
