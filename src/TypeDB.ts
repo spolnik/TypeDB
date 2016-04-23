@@ -10,25 +10,33 @@ export class TypeDB {
         });
     }
     
-    find<T>(predicate: (data: T) => boolean): Promise<Optional<T>> {
+    findFirst<T>(predicate: (item: T) => boolean): Promise<Optional<T>> {
         return new Promise<Optional<T>>((accept, reject) => {
             let obj = this.inMemory.find(predicate);
             accept(obj ? new Present(obj) : new Absent());
         });
     }
+
+    removeFirst<T>(predicate: (item: T) => boolean): Promise<Optional<T>> {
+        return new Promise<Optional<T>>((accept, reject) => {
+            let objIndex = this.inMemory.findIndex(predicate);
+            let obj = this.inMemory.splice(objIndex, 1)[0];
+            accept(obj ? new Present(obj) : new Absent());
+        })
+    }
 }
 
 export interface Optional<T> {
-    isNull: boolean;
+    isEmpty: boolean;
     value: T;
 }
 
-export class Present<T> implements Optional<T> {
-    isNull = false;
+class Present<T> implements Optional<T> {
+    isEmpty = false;
     constructor(public value: T) {}
 }
 
-export class Absent<T> implements Optional<T> {
-    isNull = true;
+class Absent<T> implements Optional<T> {
+    isEmpty = true;
     value: T = undefined;
 }
