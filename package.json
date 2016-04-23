@@ -1,0 +1,29 @@
+{
+  "name": "typedb",
+  "version": "0.0.1",
+  "description": "Simple JSON Database",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/spolnik/TypeDB.git"
+  },
+  "keywords": [
+    "Embedded",
+    "JSON",
+    "Database",
+    "Lightweight",
+    "DB"
+  ],
+  "author": "Jacek Spólnik",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/spolnik/TypeDB/issues"
+  },
+  "homepage": "https://github.com/spolnik/TypeDB#readme",
+  "devDependencies": {
+    "mocha": "^2.4.5"
+  }
+}
