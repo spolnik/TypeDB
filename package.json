@@ -9,6 +9,8 @@
   "scripts": {
     "test": "mocha build/test",
     "pretest": "npm run tsc",
+    "posttest": "npm run coverage",
+    "coverage": "istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- build/test",
     "tsc": "tsc",
     "pretsc": "typings install",
     "clean": "rm -r build/*"
@@ -32,6 +34,7 @@
   "homepage": "https://github.com/spolnik/TypeDB#readme",
   "devDependencies": {
     "chai": "^3.5.0",
+    "istanbul": "^0.4.3",
     "mocha": "^2.4.5"
   }
 }

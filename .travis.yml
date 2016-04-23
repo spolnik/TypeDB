@@ -3,9 +3,10 @@ sudo: required
 node_js:
 - "4"
 before_install:
-- pip install --user codecov
+- npm install -g codecov
 - npm install -g typescript
 - npm install -g typings
+- npm install -g istanbul
 script:
 - npm test
 after_success:
