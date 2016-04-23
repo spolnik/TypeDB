@@ -96,5 +96,13 @@ describe("TypeDB", () => {
                     done();
                 });
         });
+
+        it("find all without argument retrieves all inserted items", (done) => {
+            this.db.findAll()
+                .then((items: any[]) => {
+                    expect(items).to.have.length(3);
+                    done();
+                });
+        });
     });
 });

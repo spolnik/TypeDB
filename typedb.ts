@@ -24,9 +24,12 @@ export class TypeDB {
         });
     }
 
-    findAll<T>(predicate: (item: T) => boolean): Promise<T[]> {
+    findAll<T>(predicate?: (item: T) => boolean): Promise<T[]> {
         return new Promise<T[]>((accept, reject) => {
-            let items = this.inMemory.filter(predicate);
+            let items = predicate
+                ? this.inMemory.filter(predicate)
+                : this.inMemory.slice();
+            
             accept(items);
         });
     }
