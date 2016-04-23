@@ -7,6 +7,7 @@
     "test": "mocha build/test",
     "pretest": "npm run tsc",
     "tsc": "tsc",
+    "pretsc": "typings install",
     "clean": "rm -r build/*"
   },
   "repository": {
