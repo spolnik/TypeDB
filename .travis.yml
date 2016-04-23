@@ -1,8 +1,9 @@
 language: node_js
+sudo: required
 node_js:
 - "4"
 before_install:
-- pip install codecov
+- pip install --user codecov
 - npm install -g typescript
 - npm install -g typings
 script:
