@@ -1,6 +1,9 @@
 {
   "name": "typedb",
   "version": "0.0.1",
+  "engines": {
+    "node": "4.x"
+  },
   "description": "Simple JSON Database",
   "main": "index.js",
   "scripts": {
