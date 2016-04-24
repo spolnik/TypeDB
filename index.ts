@@ -12,45 +12,34 @@ export class TypeDB {
 
     insert<T>(obj: T): Promise<T> {
         return new Promise<T>((accept, reject) => {
-            try {
-                this.storage.push(obj);
-                accept(obj);
-            } catch (err) {
-                reject(err);
-            }
+            this.storage.push(obj)
+                .then(accept)
+                .catch(reject);
         });
     }
 
     findFirst<T>(predicate: (item: T) => boolean): Promise<Optional<T>> {
         return new Promise<Optional<T>>((accept, reject) => {
-            try {
-                let obj = this.storage.findFirst(predicate);
-                accept(this.optional(obj));
-            } catch (err) {
-                reject(err);
-            }
+            this.storage.findFirst(predicate)
+                .then((data) => {
+                    accept(this.optional(data));
+                }).catch(reject);
         });
     }
 
     removeFirst<T>(predicate: (item: T) => boolean): Promise<Optional<T>> {
         return new Promise<Optional<T>>((accept, reject) => {
-            try {
-                let obj = this.storage.removeFirst(predicate);
-                accept(this.optional(obj));
-            } catch (err) {
-                reject(err);
-            }
+            this.storage.removeFirst(predicate)
+                .then((data) => {
+                    accept(this.optional(data));
+                }).catch(reject);
         });
     }
 
     findAll<T>(predicate?: (item: T) => boolean): Promise<T[]> {
         return new Promise<T[]>((accept, reject) => {
-            try {
-                let items = this.storage.findAll(predicate);
-                accept(items);
-            } catch (err) {
-                reject(err);
-            }
+            this.storage.findAll(predicate)
+                .then(accept).catch(reject);
         });
     }
 
@@ -60,10 +49,10 @@ export class TypeDB {
 }
 
 interface Storage {
-    push(obj: any): void;
-    findFirst(predicate: (item: any) => boolean): any;
-    removeFirst(predicate: (item: any) => boolean): any;
-    findAll(predicate: (item: any) => boolean): any[];
+    push<T>(obj: T): Promise<T>;
+    findFirst<T>(predicate: (item: T) => boolean): Promise<T>;
+    removeFirst<T>(predicate: (item: T) => boolean): Promise<T>;
+    findAll<T>(predicate: (item: T) => boolean): Promise<T[]>;
 }
 
 class InMemoryStorage implements Storage {
@@ -74,23 +63,40 @@ class InMemoryStorage implements Storage {
         }
     }
 
-    push(obj: any): void {
-        this.data.push(obj);
+    push<T>(obj: T): Promise<T> {
+        return new Promise((accept, reject) => {
+            this.data.push(obj);
+            accept(obj);
+        });
     }
 
-    findFirst(predicate: (item: any) => boolean): any {
-        return this.data.find(predicate);
+    findFirst<T>(predicate: (item: T) => boolean): Promise<T> {
+        return new Promise((accept, reject) => {
+            accept(this.data.find(predicate));
+        });
     }
 
-    removeFirst(predicate: (item: any) => boolean): any {
-        let objIndex = this.data.findIndex(predicate);
-        return this.data.splice(objIndex, 1)[0];
+    removeFirst<T>(predicate: (item: T) => boolean): Promise<T> {
+        return new Promise((accept, reject) => {
+            try {
+                let objIndex = this.data.findIndex(predicate);
+                accept(this.data.splice(objIndex, 1)[0]);
+            } catch (err) {
+                reject(err);
+            }
+        });
     }
 
-    findAll(predicate: (item: any) => boolean): any[] {
-        return predicate
-            ? this.data.filter(predicate)
-            : this.data.slice();
+    findAll<T>(predicate: (item: T) => boolean): Promise<T[]> {
+        return new Promise((accept, reject) => {
+            try {
+                accept(predicate
+                    ? this.data.filter(predicate)
+                    : this.data.slice());
+            } catch (err) {
+                reject(err);
+            }
+        });
     }
 }
 
@@ -100,61 +106,58 @@ class FileStorage implements Storage {
 
     constructor(private filename: string) {
         if (!fs.existsSync(filename)) {
-            fs.writeFileSync(filename, []);
+            fs.writeFileSync(filename, "[]");
         }
 
         const data = fs.readFileSync(filename, "utf-8").trim() || "[]";
         this.storage = new InMemoryStorage(JSON.parse(data));
     }
 
-    push(obj: any): void {
-        this.storage.push(obj);
-        this.writeFile(this.storage.data, console.log);
-    }
-
-    findFirst(predicate: (item: any) => boolean): any {
-        return this.storage.findFirst(predicate);
-    }
-
-    removeFirst(predicate: (item: any) => boolean): any {
-        let obj = this.storage.removeFirst(predicate);
-        this.writeFile(this.storage.data, console.log);
-        return obj;
-    }
-
-    findAll(predicate: (item: any) => boolean): any[] {
-        return this.storage.findAll(predicate);
-    }
-
-    private readFile(): Promise<any[]> {
-
-        return new Promise((accept, reject) => {
-            fs.readFile(this.filename, {}, function (err, data) {
-                if (err) {
-                    return reject(err);
-                }
-
-                try {
-                    let obj = JSON.parse(<any>data);
-                    accept(obj);
-                } catch (err2) {
-                    err2.message = `${this.filename}: ${err2.message}`;
-                    return reject(err2);
-                }
-            });
+    push<T>(obj: T): Promise<T> {
+        return new Promise<T>((accept, reject) => {
+            this.storage.push(obj)
+                .then((data) => {
+                    this.writeFile(this.storage.data)
+                        .then(() => {
+                            accept(data);
+                        }).catch(reject);
+                }).catch(reject);
         });
     }
 
-    private writeFile(obj: any, callback: (err: NodeJS.ErrnoException) => void): Promise<{}> {
+    findFirst<T>(predicate: (item: T) => boolean): Promise<T> {
+        return new Promise((accept, reject) => {
+            accept(this.storage.findFirst(predicate));
+        });
+    }
+
+    removeFirst<T>(predicate: (item: T) => boolean): Promise<T> {
+        return new Promise((accept, reject) => {
+            this.storage.removeFirst(predicate)
+                .then((data) => {
+                    this.writeFile(this.storage.data)
+                        .then(() => {
+                            accept(data);
+                        }).catch(reject);
+                }).catch(reject);
+        });
+    }
+
+    findAll<T>(predicate: (item: T) => boolean): Promise<T[]> {
+        return new Promise((accept, reject) => {
+            this.storage.findAll(predicate)
+                .then(accept).catch(reject);
+        });
+    }
+
+    private writeFile(obj: any): Promise<{}> {
 
         return new Promise((accept, reject) => {
             try {
                 let str = `${JSON.stringify(obj)}\n`;
-                fs.writeFile(this.filename, str, {}, reject);
+                fs.writeFile(this.filename, str, {}, accept);
             } catch (err) {
-                if (callback) {
-                    return reject(err);
-                }
+                return reject(err);
             }
         });
     }

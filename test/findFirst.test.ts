@@ -17,7 +17,7 @@ describe("TypeDB", () => {
         {
             name: "file based",
             setup: () => {
-                let dbName = "findFirst.filebased.test.json";
+                let dbName = "findFirst.test.json";
 
                 if (fs.existsSync(dbName)) {
                     fs.unlinkSync(dbName);
@@ -30,9 +30,10 @@ describe("TypeDB", () => {
     ];
 
     testCases.forEach((testCase) => {
-        before(testCase.setup);
 
         describe(`#findFirst(predicate) [${testCase.name}]`, () => {
+
+            before(testCase.setup);
 
             it("should findFirst object based on any field", (done) => {
                 this.db.findFirst((person: {age: number}) => person.age === 3)

@@ -17,7 +17,7 @@ describe("TypeDB (file based)", () => {
         {
             name: "file based",
             setup: () => {
-                let dbName = "insert.filebased.test.json";
+                let dbName = "insert.test.json";
 
                 if (fs.existsSync(dbName)) {
                     fs.unlinkSync(dbName);
@@ -29,9 +29,9 @@ describe("TypeDB (file based)", () => {
     ];
 
     testCases.forEach((testCase) => {
-        before(testCase.setup);
-
         describe(`"#insert(${JSON.stringify(person)}) [${testCase.name}]`, () => {
+
+            before(testCase.setup);
 
             it("should insert new object into db", (done) => {
                 this.db.insert(person)
