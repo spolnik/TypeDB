@@ -15,8 +15,8 @@
     "tsc": "tsc",
     "build": "npm run clean && tsc",
     "build:watch": "tsc --watch",
-    "pretsc": "typings install && npm run tslint",
-    "clean": "rm -r build/*",
+    "pretsc": "typings install && npm run tslint && npm run clean",
+    "clean": "rm -rf build",
     "tslint": "tslint *.ts test/**/*.ts"
   },
   "repository": {
