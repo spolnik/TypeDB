@@ -8,12 +8,16 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha build/test",
+    "test:watch": "npm test -- -w",
     "pretest": "npm run tsc",
     "posttest": "npm run coverage",
     "coverage": "istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- build/test",
     "tsc": "tsc",
-    "pretsc": "typings install",
-    "clean": "rm -r build/*"
+    "build": "npm run clean && tsc",
+    "build:watch": "tsc --watch",
+    "pretsc": "typings install && npm run tslint",
+    "clean": "rm -r build/*",
+    "tslint": "tslint *.ts test/**/*.ts"
   },
   "repository": {
     "type": "git",

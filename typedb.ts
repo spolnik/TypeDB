@@ -12,7 +12,7 @@ export class TypeDB {
     findFirst<T>(predicate: (item: T) => boolean): Promise<Optional<T>> {
         return new Promise<Optional<T>>((accept, reject) => {
             let obj = this.inMemory.find(predicate);
-            accept(obj ? new Present(obj) : new Absent());
+            accept(this.optional(obj));
         });
     }
 
@@ -20,7 +20,7 @@ export class TypeDB {
         return new Promise<Optional<T>>((accept, reject) => {
             let objIndex = this.inMemory.findIndex(predicate);
             let obj = this.inMemory.splice(objIndex, 1)[0];
-            accept(obj ? new Present(obj) : new Absent());
+            accept(this.optional(obj));
         });
     }
 
@@ -29,9 +29,13 @@ export class TypeDB {
             let items = predicate
                 ? this.inMemory.filter(predicate)
                 : this.inMemory.slice();
-            
+
             accept(items);
         });
+    }
+
+    private optional<T>(obj: T): Optional<T> {
+        return obj ? new Present(obj) : new Absent<T>();
     }
 }
 

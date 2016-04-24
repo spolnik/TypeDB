@@ -28,7 +28,7 @@ describe("TypeDB", () => {
         });
     });
 
-    describe('#findFirst(predicate)', () => {
+    describe("#findFirst(predicate)", () => {
         before(() => {
             this.db = new TypeDB();
             this.db.insert(person);
@@ -48,7 +48,7 @@ describe("TypeDB", () => {
                     expect(data.isEmpty).to.eql(true);
                     done();
                 });
-        })
+        });
     });
 
     describe("#delete(predicate)", () => {
