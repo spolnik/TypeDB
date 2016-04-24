@@ -5,13 +5,13 @@
     "node": "4.x"
   },
   "description": "Simple JSON Database",
-  "main": "build/type-db.js",
+  "main": "index.js",
   "scripts": {
-    "test": "mocha build/test",
+    "test": "mocha test",
     "test:watch": "npm test -- -w",
     "pretest": "npm run tsc",
     "posttest": "npm run coverage",
-    "coverage": "istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- build/test",
+    "coverage": "istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- test",
     "tsc": "tsc",
     "build": "npm run clean && tsc",
     "build:watch": "tsc --watch",

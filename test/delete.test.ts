@@ -1,5 +1,5 @@
 import {expect} from "chai";
-import {TypeDB, Optional} from "../type-db";
+import {TypeDB, Optional} from "../index";
 
 describe("TypeDB", () => {
 
