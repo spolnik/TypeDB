@@ -5,7 +5,7 @@
     "node": "4.x"
   },
   "description": "Simple JSON Database",
-  "main": "index.js",
+  "main": "build/type-db.js",
   "scripts": {
     "test": "mocha build/test",
     "test:watch": "npm test -- -w",
