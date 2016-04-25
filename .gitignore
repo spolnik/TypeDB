@@ -4,4 +4,4 @@ typings
 coverage
 *.js
 *.js.map
-*.test.json
+test/tmp/*.test.json

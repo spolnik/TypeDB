@@ -115,7 +115,7 @@ class FileStorage implements Storage {
         return new Promise((accept, reject) => {
             try {
                 let str = `${JSON.stringify(obj)}\n`;
-                fs.writeFile(this.filename, str, {}, accept);
+                fs.writeFile(this.filename, str, { flag: "w"}, accept);
             } catch (err) {
                 return reject(err);
             }

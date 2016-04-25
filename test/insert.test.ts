@@ -17,7 +17,7 @@ describe("TypeDB (file based)", () => {
         {
             name: "file based",
             setup: () => {
-                let dbName = "test/insert.test.json";
+                let dbName = "test/tmp/insert.test.json";
 
                 if (fs.existsSync(dbName)) {
                     fs.unlinkSync(dbName);
