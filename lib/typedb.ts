@@ -10,11 +10,7 @@ export class TypeDB {
     }
 
     insert<T>(obj: T): Promise<T> {
-        return new Promise<T>((accept, reject) => {
-            this.storage.push(obj)
-                .then(accept)
-                .catch(reject);
-        });
+        return this.storage.push(obj);
     }
 
     findFirst<T>(predicate: (item: T) => boolean): Promise<Optional<T>> {
@@ -36,9 +32,6 @@ export class TypeDB {
     }
 
     findAll<T>(predicate?: (item: T) => boolean): Promise<T[]> {
-        return new Promise<T[]>((accept, reject) => {
-            this.storage.findAll(predicate)
-                .then(accept).catch(reject);
-        });
+        return this.storage.findAll(predicate);
     }
 }

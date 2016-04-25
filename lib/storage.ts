@@ -86,9 +86,7 @@ class FileStorage implements Storage {
     }
 
     findFirst<T>(predicate: (item: T) => boolean): Promise<T> {
-        return new Promise((accept, reject) => {
-            accept(this.storage.findFirst(predicate));
-        });
+        return this.storage.findFirst(predicate);
     }
 
     removeFirst<T>(predicate: (item: T) => boolean): Promise<T> {
@@ -104,10 +102,7 @@ class FileStorage implements Storage {
     }
 
     findAll<T>(predicate: (item: T) => boolean): Promise<T[]> {
-        return new Promise((accept, reject) => {
-            this.storage.findAll(predicate)
-                .then(accept).catch(reject);
-        });
+        return this.storage.findAll(predicate);
     }
 
     private writeFile(obj: any): Promise<{}> {
