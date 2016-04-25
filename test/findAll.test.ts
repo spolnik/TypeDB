@@ -22,7 +22,7 @@ describe("TypeDB", () => {
         {
             name: "file based",
             setup: () => {
-                let dbName = "findAll.test.json";
+                let dbName = "test/findAll.test.json";
 
                 if (fs.existsSync(dbName)) {
                     fs.unlinkSync(dbName);

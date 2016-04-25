@@ -1,4 +1,5 @@
 import * as fs from "fs";
+import {Optional} from "./lib/optional";
 
 export class TypeDB {
 
@@ -22,7 +23,7 @@ export class TypeDB {
         return new Promise<Optional<T>>((accept, reject) => {
             this.storage.findFirst(predicate)
                 .then((data) => {
-                    accept(this.optional(data));
+                    accept(Optional.of(data));
                 }).catch(reject);
         });
     }
@@ -31,7 +32,7 @@ export class TypeDB {
         return new Promise<Optional<T>>((accept, reject) => {
             this.storage.removeFirst(predicate)
                 .then((data) => {
-                    accept(this.optional(data));
+                    accept(Optional.of(data));
                 }).catch(reject);
         });
     }
@@ -41,10 +42,6 @@ export class TypeDB {
             this.storage.findAll(predicate)
                 .then(accept).catch(reject);
         });
-    }
-
-    private optional<T>(obj: T): Optional<T> {
-        return obj ? new Present(obj) : new Absent<T>();
     }
 }
 
@@ -161,21 +158,4 @@ class FileStorage implements Storage {
             }
         });
     }
-}
-
-export interface Optional<T> {
-    isEmpty: boolean;
-    value: T;
-}
-
-class Present<T> implements Optional<T> {
-    isEmpty = false;
-
-    constructor(public value: T) {
-    }
-}
-
-class Absent<T> implements Optional<T> {
-    isEmpty = true;
-    value: T = undefined;
 }

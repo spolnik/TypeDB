@@ -1,6 +1,7 @@
 import {expect} from "chai";
-import {TypeDB, Optional} from "../index";
+import {TypeDB} from "../index";
 import * as fs from "fs";
+import {Optional} from "../lib/optional";
 
 describe("TypeDB", () => {
 
@@ -17,7 +18,7 @@ describe("TypeDB", () => {
         {
             name: "file based",
             setup: () => {
-                let dbName = "findFirst.test.json";
+                let dbName = "test/findFirst.test.json";
 
                 if (fs.existsSync(dbName)) {
                     fs.unlinkSync(dbName);
