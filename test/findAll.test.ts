@@ -19,23 +19,23 @@ describe("TypeDB", () => {
                 this.db.insert(person3);
             }
         },
-        {
-            name: "file based",
-            setup: () => {
-                let dbName = "test/tmp/findAll.test.json";
-
-                if (fs.existsSync(dbName)) {
-                    fs.unlinkSync(dbName);
-                }
-
-                this.db = new TypeDB(dbName);
-                this.db.insert(person);
-
-                let person2 = Object.assign({}, person, {name: "Tom"});
-                this.db.insert(person2);
-                this.db.insert(person3);
-            }
-        }
+        // {
+        //     name: "file based",
+        //     setup: () => {
+        //         let dbName = "test/tmp/findAll.test.json";
+        //
+        //         if (fs.existsSync(dbName)) {
+        //             fs.unlinkSync(dbName);
+        //         }
+        //
+        //         this.db = new TypeDB(dbName);
+        //         this.db.insert(person);
+        //
+        //         let person2 = Object.assign({}, person, {name: "Tom"});
+        //         this.db.insert(person2);
+        //         this.db.insert(person3);
+        //     }
+        // }
     ];
 
     testCases.forEach((testCase) => {
@@ -44,28 +44,19 @@ describe("TypeDB", () => {
 
             before(testCase.setup);
 
-            it("should findFirst two objects which where inserted to database, and which have age set to 3", (done) => {
-                this.db.findAll((person: {age: number}) => person.age === 3)
-                    .then((items: {name: string, age: number}[]) => {
-                        expect(items).to.have.length(2);
-                        done();
-                    });
+            it("should findFirst two objects which where inserted to database, and which have age set to 3", () => {
+                let items = this.db.findAll((person: {age: number}) => person.age === 3);
+                expect(items).to.have.length(2);
             });
 
-            it("should findFirst only one object which has name set to Julia", (done) => {
-                this.db.findAll((person: {name: string}) => person.name === "Julia")
-                    .then((items: {name: string, age: number}[]) => {
-                        expect(items[0]).to.eql(person3);
-                        done();
-                    });
+            it("should findFirst only one object which has name set to Julia", () => {
+                let items = this.db.findAll((person: {name: string}) => person.name === "Julia");
+                expect(items[0]).to.eql(person3);
             });
 
-            it("findFirst all without argument retrieves all inserted items", (done) => {
-                this.db.findAll()
-                    .then((items: any[]) => {
-                        expect(items).to.have.length(3);
-                        done();
-                    });
+            it("findFirst all without argument retrieves all inserted items", () => {
+                let items = this.db.findAll();
+                expect(items).to.have.length(3);
             });
         });
     });

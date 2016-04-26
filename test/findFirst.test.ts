@@ -15,19 +15,19 @@ describe("TypeDB", () => {
                 this.db.insert(person);
             }
         },
-        {
-            name: "file based",
-            setup: () => {
-                let dbName = "test/tmp/findFirst.test.json";
-
-                if (fs.existsSync(dbName)) {
-                    fs.unlinkSync(dbName);
-                }
-
-                this.db = new TypeDB(dbName);
-                this.db.insert(person);
-            }
-        }
+        // {
+        //     name: "file based",
+        //     setup: () => {
+        //         let dbName = "test/tmp/findFirst.test.json";
+        //
+        //         if (fs.existsSync(dbName)) {
+        //             fs.unlinkSync(dbName);
+        //         }
+        //
+        //         this.db = new TypeDB(dbName);
+        //         this.db.insert(person);
+        //     }
+        // }
     ];
 
     testCases.forEach((testCase) => {
@@ -36,20 +36,14 @@ describe("TypeDB", () => {
 
             before(testCase.setup);
 
-            it("should findFirst object based on any field", (done) => {
-                this.db.findFirst((person: {age: number}) => person.age === 3)
-                    .then((data: Optional<{name: string, age: number}>) => {
-                        expect(data.value).to.eql(person);
-                        done();
-                    });
+            it("should findFirst object based on any field", () => {
+                let item = this.db.findFirst((person: {age: number}) => person.age === 3);
+                expect(item.value).to.eql(person);
             });
 
-            it("should return Absent in case of no object is found", (done) => {
-                this.db.findFirst((person: {name: string}) => person.name === "dummy")
-                    .then((data: Optional<any>) => {
-                        expect(data.isEmpty).to.eql(true);
-                        done();
-                    });
+            it("should return Absent in case of no object is found", () => {
+                let item = this.db.findFirst((person: {name: string}) => person.name === "dummy");
+                expect(item.isEmpty).to.eql(true);
             });
         });
     });

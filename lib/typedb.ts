@@ -1,37 +1,38 @@
 import {Optional} from "./optional";
-import {StorageFactory, Storage} from "./storage";
+import {store} from "./store";
+import {setFilename, addItem, removeItem} from "./actions";
 
 export class TypeDB {
 
-    private storage: Storage;
-
     constructor(private filename?: string) {
-        this.storage = StorageFactory.create(filename);
-    }
-
-    insert<T>(obj: T): Promise<T> {
-        return this.storage.push(obj);
-    }
-
-    findFirst<T>(predicate: (item: T) => boolean): Promise<Optional<T>> {
-        return new Promise<Optional<T>>((accept, reject) => {
-            this.storage.findFirst(predicate)
-                .then((data) => {
-                    accept(Optional.of(data));
-                }).catch(reject);
+        store.subscribe(() => {
+            console.log(store.getState());
         });
+
+        if (filename) {
+            store.dispatch(setFilename(filename));
+        }
     }
 
-    removeFirst<T>(predicate: (item: T) => boolean): Promise<Optional<T>> {
-        return new Promise<Optional<T>>((accept, reject) => {
-            this.storage.removeFirst(predicate)
-                .then((data) => {
-                    accept(Optional.of(data));
-                }).catch(reject);
-        });
+    insert<T>(obj: T): T {
+        store.dispatch(addItem(obj));
+        return obj;
     }
 
-    findAll<T>(predicate?: (item: T) => boolean): Promise<T[]> {
-        return this.storage.findAll(predicate);
+    findFirst<T>(predicate: (item: T) => boolean): Optional<T> {
+        let item = store.getState().items.find(predicate);
+        return Optional.of(item);
+    }
+
+    removeFirst<T>(predicate: (item: T) => boolean): Optional<T> {
+        let toBeRemoved = store.getState().items.find(predicate);
+        store.dispatch(removeItem(predicate));
+        return Optional.of(toBeRemoved);
+    }
+
+    findAll<T>(predicate?: (item: T) => boolean): T[] {
+        return predicate
+            ? store.getState().items.filter(predicate)
+            : store.getState().items;
     }
 }

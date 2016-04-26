@@ -15,19 +15,19 @@ describe("TypeDB", () => {
                 this.db.insert(person);
             }
         },
-        {
-            name: "file based",
-            setup: () => {
-                let dbName = "test/tmp/delete.test.json";
-
-                if (fs.existsSync(dbName)) {
-                    fs.unlinkSync(dbName);
-                }
-
-                this.db = new TypeDB(dbName);
-                this.db.insert(person);
-            }
-        }
+        // {
+        //     name: "file based",
+        //     setup: () => {
+        //         let dbName = "test/tmp/delete.test.json";
+        //
+        //         if (fs.existsSync(dbName)) {
+        //             fs.unlinkSync(dbName);
+        //         }
+        //
+        //         this.db = new TypeDB(dbName);
+        //         this.db.insert(person);
+        //     }
+        // }
     ];
 
     testCases.forEach((testCase) => {
@@ -36,17 +36,12 @@ describe("TypeDB", () => {
 
             before(testCase.setup);
 
-            it("should delete existing object based on any field (remove just first item)", (done) => {
-                this.db.removeFirst((person: {name: string}) => person.name === "Mikolaj")
-                    .then((removedItem: Optional<{name: string}>) => {
-                        expect(removedItem.value.name).to.be.equal("Mikolaj");
+            it("should delete existing object based on any field (remove just first item)", () => {
+                let removedItem = this.db.removeFirst((person: {name: string}) => person.name === "Mikolaj");
+                expect(removedItem.value.name).to.be.equal("Mikolaj");
 
-                        this.db.findFirst((person: {name: string}) => person.name === "Mikolaj")
-                            .then((data: Optional<any>) => {
-                                expect(data.isEmpty).to.eql(true);
-                                done();
-                            });
-                    });
+                let item = this.db.findFirst((person: {name: string}) => person.name === "Mikolaj");
+                expect(item.isEmpty).to.eql(true);
             });
         });
     });

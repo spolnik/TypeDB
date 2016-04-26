@@ -1,4 +1,4 @@
-export class Optional<T> {
+export abstract class Optional<T> {
     isEmpty: boolean;
     value: T;
 
