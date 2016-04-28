@@ -1,17 +1,17 @@
 {
   "name": "typedb",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "engines": {
-    "node": "4.x"
+    "node": "6.x"
   },
   "description": "Simple JSON Database",
   "main": "index.js",
   "scripts": {
-    "test": "mocha test --harmony_default_parameters",
+    "test": "mocha test",
     "test:watch": "npm test -- -w",
     "pretest": "npm run tsc",
     "posttest": "npm run coverage",
-    "coverage": "node --harmony_default_parameters ./node_modules/istanbul/lib/cli.js cover ./node_modules/mocha/bin/_mocha --report lcovonly -- test",
+    "coverage": "istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- test",
     "tsc": "tsc",
     "build": "npm run clean && tsc",
     "build:watch": "tsc --watch",
