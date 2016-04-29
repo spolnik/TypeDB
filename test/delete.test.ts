@@ -41,7 +41,7 @@ describe("TypeDB", () => {
                 expect(removedItem.value.name).to.be.equal("Mikolaj");
 
                 let item = this.db.findFirst((person: {name: string}) => person.name === "Mikolaj");
-                expect(item.isEmpty).to.eql(true);
+                expect(item.isEmpty()).to.eql(true);
             });
         });
     });

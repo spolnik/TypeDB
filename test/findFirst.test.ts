@@ -43,7 +43,7 @@ describe("TypeDB", () => {
 
             it("should return Absent in case of no object is found", () => {
                 let item = this.db.findFirst((person: {name: string}) => person.name === "dummy");
-                expect(item.isEmpty).to.eql(true);
+                expect(item.isEmpty()).to.eql(true);
             });
         });
     });

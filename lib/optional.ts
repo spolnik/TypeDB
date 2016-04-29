@@ -1,25 +1,14 @@
-export abstract class Optional<T> {
-    isEmpty: boolean;
-    value: T;
+export class Optional<T> {
+
+    static EMPTY = new Optional(undefined);
+
+    constructor(public value: T) {}
+
+    isEmpty() {
+        return this.value ? false : true;
+    };
 
     static of<T>(obj: T): Optional<T> {
-        return obj ? new Present(obj) : new Absent<T>();
-    }
-}
-
-class Present<T> extends Optional<T> {
-    isEmpty = false;
-
-    constructor(public value: T) {
-        super();
-    }
-}
-
-class Absent<T> extends Optional<T> {
-    isEmpty = true;
-    value: T = undefined;
-
-    constructor() {
-        super();
+        return obj ? new Optional(obj) : Optional.EMPTY;
     }
 }
